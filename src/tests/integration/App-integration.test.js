@@ -18,20 +18,9 @@ beforeAll(async function() {
   });
 });
 
-it('send one message and retrieve it', async() => {
-  await contract.addMessage({ text: 'aloha' });
+it('send two more messages and expect two total', async() => {
+  await contract.addMessage({ text: 'foo', 'premiumType': 0 });
+  await contract.addMessage({ text: 'bar', 'premiumType': 0 });
   const msgs = await contract.getMessages();
-  const expectedMessagesResult = [{
-    premium: false,
-    sender: accountId,
-    text: 'aloha'
-  }];
-  expect(msgs).toEqual(expectedMessagesResult);
-});
-
-it('send two more messages and expect three total', async() => {
-  await contract.addMessage({ text: 'foo' });
-  await contract.addMessage({ text: 'bar' });
-  const msgs = await contract.getMessages();
-  expect(msgs.length).toEqual(3);
+  expect(msgs.length).toEqual(2);
 });

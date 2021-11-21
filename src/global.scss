@@ -120,3 +120,16 @@ button {
   padding-left: 0.25em;
   margin-left: -0.5em;
 }
+
+select {
+  position: relative;
+  transition: top 50ms;
+  &:hover, &:focus {
+    top: -1px;
+  }
+  &:active {
+    background: var(--secondary);
+    border-color: var(--secondary);
+    top: 1px;
+  }
+}

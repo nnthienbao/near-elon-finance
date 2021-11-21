@@ -1,9 +1,15 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import Big from 'big.js';
 
-export default function Form({ onSubmit, currentUser }) {
+export default function Form({ contract, onSubmit, currentUser }) {
+  const [isSign, setIsSign] = useState([]);
+  useEffect(() => {
+    // TODO: don't just fetch once: isSign
+    contract.checkIsSign({accountId: currentUser.accountId}).then(setIsSign);
+  }, []);
   return (
+    !isSign ?
     <form onSubmit={onSubmit}>
       <fieldset id="fieldset">
         <p>Sign the guest book, { currentUser.accountId }!</p>
@@ -29,11 +35,21 @@ export default function Form({ onSubmit, currentUser }) {
           />
           <span title="NEAR Tokens">Ⓝ</span>
         </p>
+        <p>
+          <label htmlFor="theme">Theme (Premium only):</label>
+          <select className="form-select" defaultValue='0'>
+            <option selected>Open this select menu</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </select>
+        </p>
         <button type="submit">
           Sign
         </button>
       </fieldset>
     </form>
+    : <p>Is Sign {currentUser.accountId}</p>
   );
 }
 
