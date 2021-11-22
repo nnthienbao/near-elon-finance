@@ -5,6 +5,7 @@ import TextField from '@mui/material/TextField'
 import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
+import SingleMessage from './SingleMessage';
 
 const premiumTypeLists = [
   {
@@ -60,6 +61,7 @@ export default function Form({ contract, onSubmit, currentUser }) {
           value={donation}
           onChange={e => setDonation(e.target.value)}
         />
+        {donation > 0 ?
         <TextField
           style={{marginTop: 12}}
           fullWidth
@@ -73,9 +75,17 @@ export default function Form({ contract, onSubmit, currentUser }) {
           {premiumTypeLists.map((option) => (
             <MenuItem key={option.value} value={option.value}>
               {option.label}
+              <SingleMessage
+                accountId='demo.testnet'
+                amount={1000000000000000000000000}
+                isPremium={true}
+                premiumType={option.value}
+                message='This is demo message'
+                timestamp={1637575141912023976}  />
             </MenuItem>
           ))}
-        </TextField>
+        </TextField> : null
+        }
         <Button style={{marginTop: 12}} onClick={() => onSubmit({message, donation, premiumType}, setIsSign)} variant="contained">Sign</Button>
       </Container>
       :<Container sx={{ width: 600 }}><Typography variant="h6" gutterBottom>
