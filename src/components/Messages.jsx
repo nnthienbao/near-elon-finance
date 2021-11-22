@@ -1,21 +1,26 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import Container from '@mui/material/Container'
+import Typography from '@mui/material/Typography';
+import SingleMessage from './SingleMessage';
 
 export default function Messages({ messages }) {
   return (
-    <>
-      <h2>Messages</h2>
+    <Container sx={{ width: 600 }}>
+      <Typography gutterBottom variant="h5" component="div">
+        <strong>Messages</strong>
+      </Typography>
       {messages.map((message, i) =>
         // TODO: format as cards, add timestamp
-        <p key={i} className={message.premium ? 'is-premium' : ''}>
-          <strong>{message.sender}</strong>:<br/>
-          {message.text}
-        </p>
+        <SingleMessage
+          style={{marginTop: 12}}
+          key={i}
+          accountId={message.sender}
+          amount={message.amount}
+          isPremium={message.premium}
+          premiumType={message.premiumType}
+          message={message.text}
+          timestamp={message.timestamp}  />
       )}
-    </>
+    </Container>
   );
 }
-
-Messages.propTypes = {
-  messages: PropTypes.array
-};

@@ -12,15 +12,15 @@ const premiumTypeLists = [
     value: 0,
   },
   {
-    label: 'Red',
+    label: 'Theme 1',
     value: 1,
   },
   {
-    label: 'Green',
+    label: 'Theme 2',
     value: 2,
   },
   {
-    label: 'Blue',
+    label: 'Theme 3',
     value: 3
   }
 ];

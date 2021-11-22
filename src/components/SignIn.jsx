@@ -13,7 +13,7 @@ export default function SignIn({signIn}) {
       </Typography>
     </Box>
     <Box sx={{  display: 'flex', justifyContent: 'center' }}>
-    <Button color="inherit" onClick={signIn}>Login</Button>
+    <Button onClick={signIn} variant="contained">Login</Button>
     </Box>
     </Container>
   );
