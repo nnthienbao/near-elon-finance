@@ -70,7 +70,7 @@ export default function Form({ contract, currentUser }) {
               size="small"
               id="outlined-disabled"
               label="Account ID"
-              defaultValue="nnthienbao.testnet"
+              defaultValue={currentUser.accountId}
               InputProps={{
                 endAdornment: (
                   <IconButton
@@ -134,7 +134,7 @@ export default function Form({ contract, currentUser }) {
           </Grid>
         </Grid>
       )}
-      <SendDialog open={openSendDialog} setOpen={setOpenSendDialog} />
+      <SendDialog open={openSendDialog} setOpen={setOpenSendDialog} contract={contract} currentUser={currentUser} />
       <ClaimDialog open={openClaimDialog} setOpen={setOpenClaimDialog} contract={contract} currentUser={currentUser} getBalance={getBalance} />
     </>
   );
