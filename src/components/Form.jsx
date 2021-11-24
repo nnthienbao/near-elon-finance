@@ -27,12 +27,16 @@ export default function Form({ contract, currentUser }) {
       .then((isRegister) => {
         setIsRegister(isRegister);
         if (isRegister) {
-          contract.ft_balance_of({account_id: currentUser.accountId}).then(amount => {
-            setAmount(amount);
-          })
+          getBalance();
         }
       });
   }, []);
+
+  const getBalance = () => {
+    contract.ft_balance_of({account_id: currentUser.accountId}).then(amount => {
+      setAmount(amount);
+    })
+  }
 
   const onRegister = () => {
     contract.storage_deposit({}, BOATLOAD_OF_GAS, Big('0.00125').times(10 ** 24).toFixed()).then(res => {
@@ -131,7 +135,7 @@ export default function Form({ contract, currentUser }) {
         </Grid>
       )}
       <SendDialog open={openSendDialog} setOpen={setOpenSendDialog} />
-      <ClaimDialog open={openClaimDialog} setOpen={setOpenClaimDialog} />
+      <ClaimDialog open={openClaimDialog} setOpen={setOpenClaimDialog} contract={contract} currentUser={currentUser} getBalance={getBalance} />
     </>
   );
 }

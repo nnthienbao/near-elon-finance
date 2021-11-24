@@ -6,9 +6,17 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 
-export default function ClaimDialog({open, setOpen}) {
+export default function ClaimDialog({open, setOpen, contract, currentUser, getBalance}) {
+  const [amountClaim, setAmountClaim] = useState(0);
   const handleClose = () => {
     setOpen(false);
+  }
+
+  const claim = () => {
+    contract.ft_mint({receiver_id: currentUser.accountId, amount: amountClaim}).then(res => {
+      getBalance();
+      handleClose();
+    });
   }
 
   return (
@@ -16,6 +24,8 @@ export default function ClaimDialog({open, setOpen}) {
       <DialogTitle>Claim free ELOF</DialogTitle>
       <DialogContent>
         <TextField
+          value={amountClaim}
+          onChange={e => setAmountClaim(e.target.value)}
           autoFocus
           margin="dense"
           id="amount"
@@ -28,7 +38,7 @@ export default function ClaimDialog({open, setOpen}) {
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleClose}>Claim</Button>
+        <Button onClick={claim}>Claim</Button>
       </DialogActions>
     </Dialog>
   );
