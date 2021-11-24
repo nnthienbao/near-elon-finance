@@ -11,6 +11,7 @@ import CopyButton from "@mui/icons-material/CopyAll";
 import SendDialog from "./SendDialog";
 import ClaimDialog from "./ClaimDialog";
 import Big from "big.js";
+import { useSnackbar } from 'notistack';
 import elonImg from "../../assets/elon.png";
 
 const BOATLOAD_OF_GAS = Big(3)
@@ -18,6 +19,8 @@ const BOATLOAD_OF_GAS = Big(3)
   .toFixed();
 
 export default function Form({ contract, currentUser }) {
+  const { enqueueSnackbar } = useSnackbar();
+
   const [openSendDialog, setOpenSendDialog] = useState(false);
   const [openClaimDialog, setOpenClaimDialog] = useState(false);
   const [isRegister, setIsRegister] = useState(false);
@@ -58,7 +61,12 @@ export default function Form({ contract, currentUser }) {
 
   const copyAccountIdToClipboard = () => {
     navigator.clipboard.writeText(currentUser.accountId);
+    enqueueSnackbar('Address has been copied to clipboard', {variant: 'success'})
   };
+
+  const onClaimSuccess = () => {
+    enqueueSnackbar('Claim success', {variant: 'success'})
+  }
 
   return (
     <>
@@ -171,6 +179,7 @@ export default function Form({ contract, currentUser }) {
         contract={contract}
         currentUser={currentUser}
         getBalance={getBalance}
+        onClaimSuccess={onClaimSuccess}
       />
     </>
   );
