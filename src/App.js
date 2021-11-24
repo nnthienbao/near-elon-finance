@@ -16,32 +16,6 @@ const SUGGESTED_DONATION = '0';
 const BOATLOAD_OF_GAS = Big(3).times(10 ** 13).toFixed();
 
 const App = ({ contract, currentUser, nearConfig, wallet }) => {
-  const [messages, setMessages] = useState([]);
-
-  useEffect(() => {
-    // TODO: don't just fetch once; subscribe!
-    contract.getMessages().then(setMessages);
-  }, []);
-
-  const onSubmit = (params, setIsSign) => {
-    console.log('onSubmit')
-    const {message, donation, premiumType} = params;
-
-    // TODO: optimistically update page with new message,
-    // update blockchain data in background
-    // add uuid to each message, so we know which one is already known
-    contract.addMessage(
-      { text: message, premiumType: premiumType },
-      BOATLOAD_OF_GAS,
-      Big(donation || '0').times(10 ** 24).toFixed()
-    ).then(() => {
-      contract.getMessages().then(messages => {
-        setMessages(messages);
-        setIsSign(true)
-      });
-    });
-  };
-
   const signIn = () => {
     wallet.requestSignIn(
       nearConfig.contractName,
@@ -80,30 +54,12 @@ const App = ({ contract, currentUser, nearConfig, wallet }) => {
     </Box>
     <div style={{marginTop: 20}}>
     { currentUser
-      ? <Form contract={contract} onSubmit={onSubmit} currentUser={currentUser} />
+      ? <Form contract={contract} currentUser={currentUser} />
       : <SignIn signIn={signIn} />
     }
     </div>
     </>
   );
-};
-
-App.propTypes = {
-  contract: PropTypes.shape({
-    addMessage: PropTypes.func.isRequired,
-    getMessages: PropTypes.func.isRequired
-  }).isRequired,
-  currentUser: PropTypes.shape({
-    accountId: PropTypes.string.isRequired,
-    balance: PropTypes.string.isRequired
-  }),
-  nearConfig: PropTypes.shape({
-    contractName: PropTypes.string.isRequired
-  }).isRequired,
-  wallet: PropTypes.shape({
-    requestSignIn: PropTypes.func.isRequired,
-    signOut: PropTypes.func.isRequired
-  }).isRequired
 };
 
 export default App;
