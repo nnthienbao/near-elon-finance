@@ -1,105 +1,67 @@
-import React, {useEffect, useState} from 'react';
-import PropTypes from 'prop-types';
-import Typography from '@mui/material/Typography'
-import TextField from '@mui/material/TextField'
-import MenuItem from '@mui/material/MenuItem'
-import Button from '@mui/material/Button'
-import Container from '@mui/material/Container'
-import SingleMessage from './SingleMessage';
-
-const premiumTypeLists = [
-  {
-    label: 'Default',
-    value: 0,
-  },
-  {
-    label: 'Theme 1',
-    value: 1,
-  },
-  {
-    label: 'Theme 2',
-    value: 2,
-  },
-  {
-    label: 'Theme 3',
-    value: 3
-  }
-];
+import React, { useEffect, useState } from "react";
+import Grid from "@mui/material/Grid";
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import ReceiptIcon from "@mui/icons-material/Receipt";
+import SendIcon from "@mui/icons-material/Send";
+import IconButton from '@mui/material/IconButton';
+import CopyButton from '@mui/icons-material/CopyAll';
 
 export default function Form({ contract, onSubmit, currentUser }) {
-  const [isSign, setIsSign] = useState(true);
-  const [message, setMessage] = useState('');
-  const [donation, setDonation] = useState(0);
-  const [premiumType, setPremiumType] = useState(0);
-  useEffect(() => {
-    // TODO: don't just fetch once: isSign
-    contract.checkIsSign({accountId: currentUser.accountId}).then(setIsSign);
-  }, []);
   return (
-    <Container>
-    {
-      !isSign ?
-      <Container sx={{ width: 600 }}>
-        <Typography variant="h6" gutterBottom component="div">
-          <span style={{color: "red"}}>{currentUser.accountId}</span> - <strong>Sign the guest book</strong>
+    <Grid
+      container
+      spacing={0}
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+    >
+      <Grid item>
+        <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
+          Balance
         </Typography>
+      </Grid>
+      <Grid item style={{ marginTop: 30 }}>
+        <Typography variant="h3" component="div" sx={{ flexGrow: 1 }}>
+          1000 ELOF
+        </Typography>
+      </Grid>
+      <Grid item item style={{ marginTop: 30 }}>
         <TextField
-          style={{marginTop: 12}}
-          fullWidth
-          required
-          id="message"
-          label="Message"
-          value={message}
-          onChange={e => setMessage(e.target.value)}
+          disabled
+          size="small"
+          id="outlined-disabled"
+          label="Account ID"
+          defaultValue="nnthienbao.testnet"
+          InputProps={{
+            endAdornment: (
+              <IconButton
+                size="small"
+                color="primary"
+                aria-label="upload picture"
+                component="span"
+              >
+                <CopyButton />
+              </IconButton>
+            ),
+          }}
         />
-        <TextField
-          style={{marginTop: 12}}
-          fullWidth
-          id="donation"
-          label="Donation Ⓝ (optional)"
-          type="number"
-          value={donation}
-          onChange={e => setDonation(e.target.value)}
-        />
-        {donation > 0 ?
-        <TextField
-          style={{marginTop: 12}}
-          fullWidth
-          id="premiumType"
-          select
-          label="Theme (Premium only)"
-          helperText="Please choose your theme"
-          value={premiumType}
-          onChange={e => setPremiumType(e.target.value)}
-        >
-          {premiumTypeLists.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-              <SingleMessage
-                accountId='demo.testnet'
-                amount={1000000000000000000000000}
-                isPremium={true}
-                premiumType={option.value}
-                message='This is demo message'
-                timestamp={1637575141912023976}  />
-            </MenuItem>
-          ))}
-        </TextField> : null
-        }
-        <Button style={{marginTop: 12}} onClick={() => onSubmit({message, donation, premiumType}, setIsSign)} variant="contained">Sign</Button>
-      </Container>
-      :<Container sx={{ width: 600 }}><Typography variant="h6" gutterBottom>
-      <span style={{color: "red"}}>{currentUser.accountId}</span> - <strong>You cannot sign more than once</strong>
-    </Typography></Container>
-    }
-    </Container>
+      </Grid>
+      <Grid item style={{ marginTop: 40 }}>
+        <Stack direction="row" spacing={2}>
+          <Button variant="contained" endIcon={<SendIcon />}>
+            Send
+          </Button>
+          <Button variant="outlined" startIcon={<ReceiptIcon />}>
+            Receive
+          </Button>
+          <Button variant="outlined" startIcon={<ReceiptIcon />}>
+            Claim
+          </Button>
+        </Stack>
+      </Grid>
+    </Grid>
   );
 }
-
-Form.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-  currentUser: PropTypes.shape({
-    accountId: PropTypes.string.isRequired,
-    balance: PropTypes.string.isRequired
-  })
-};

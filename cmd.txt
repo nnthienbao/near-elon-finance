@@ -1,0 +1,3 @@
+near create-account guestbook.rubikone.testnet --masterAccount rubikone.testnet
+
+near deploy --accountId guestbook.rubikone.testnet --wasmFile out/main.wasm

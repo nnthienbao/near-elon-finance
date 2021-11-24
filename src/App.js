@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import Big from 'big.js';
 import Form from './components/Form';
 import SignIn from './components/SignIn';
-import Messages from './components/Messages';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -70,7 +69,7 @@ const App = ({ contract, currentUser, nearConfig, wallet }) => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            <h3>NEAR Guest Book</h3>
+            <h3>Elon Finance</h3>
           </Typography>
           { currentUser
             ? <Button color="inherit" onClick={signOut}>Logout</Button>
@@ -85,24 +84,7 @@ const App = ({ contract, currentUser, nearConfig, wallet }) => {
       : <SignIn signIn={signIn} />
     }
     </div>
-    <div style={{marginTop: 20}}>
-    { !!currentUser && !!messages.length && <Messages messages={messages}/> }
-    </div>
     </>
-    // <main>
-    //   <header>
-    //     <h1>NEAR Guest Book</h1>
-    //     { currentUser
-    //       ? <button onClick={signOut}>Log out</button>
-    //       : <button onClick={signIn}>Log in</button>
-    //     }
-    //   </header>
-    //   { currentUser
-    //     ? <Form contract={contract} onSubmit={onSubmit} currentUser={currentUser} />
-    //     : <SignIn/>
-    //   }
-    //   { !!currentUser && !!messages.length && <Messages messages={messages}/> }
-    // </main>
   );
 };
 
