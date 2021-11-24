@@ -8,9 +8,14 @@ import ReceiptIcon from "@mui/icons-material/Receipt";
 import SendIcon from "@mui/icons-material/Send";
 import IconButton from '@mui/material/IconButton';
 import CopyButton from '@mui/icons-material/CopyAll';
+import SendDialog from "./SendDialog";
+import ClaimDialog from "./ClaimDialog"
 
 export default function Form({ contract, onSubmit, currentUser }) {
+  const [openSendDialog, setOpenSendDialog] = useState(false);
+  const [openClaimDialog, setOpenClaimDialog] = useState(false);
   return (
+    <>
     <Grid
       container
       spacing={0}
@@ -51,17 +56,20 @@ export default function Form({ contract, onSubmit, currentUser }) {
       </Grid>
       <Grid item style={{ marginTop: 40 }}>
         <Stack direction="row" spacing={2}>
-          <Button variant="contained" endIcon={<SendIcon />}>
+          <Button onClick={() =>setOpenSendDialog(true)} variant="contained" endIcon={<SendIcon />}>
             Send
           </Button>
           <Button variant="outlined" startIcon={<ReceiptIcon />}>
             Receive
           </Button>
-          <Button variant="outlined" startIcon={<ReceiptIcon />}>
+          <Button onClick={() =>setOpenClaimDialog(true)} variant="outlined" startIcon={<ReceiptIcon />}>
             Claim
           </Button>
         </Stack>
       </Grid>
     </Grid>
+    <SendDialog open={openSendDialog} setOpen={setOpenSendDialog} />
+    <ClaimDialog open={openClaimDialog} setOpen={setOpenClaimDialog} />
+    </>
   );
 }
