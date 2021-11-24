@@ -1,24 +1,37 @@
 import React, { useEffect, useState } from "react";
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import Button from '@mui/material/Button';
+import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import Button from "@mui/material/Button";
 
-export default function ClaimDialog({open, setOpen, contract, currentUser, getBalance, onClaimSuccess}) {
+export default function ClaimDialog({
+  open,
+  setOpen,
+  contract,
+  currentUser,
+  getBalance,
+  onClaimSuccess,
+}) {
   const [amountClaim, setAmountClaim] = useState(0);
+  const [isWaiting, setIsWaiting] = useState(false);
   const handleClose = () => {
     setOpen(false);
-  }
+  };
 
   const claim = () => {
-    contract.ft_mint({receiver_id: currentUser.accountId, amount: amountClaim}).then(res => {
-      getBalance();
-      handleClose();
-      onClaimSuccess();
-    });
-  }
+    setIsWaiting(true);
+    contract
+      .ft_mint({ receiver_id: currentUser.accountId, amount: amountClaim })
+      .then((res) => {
+        getBalance();
+        handleClose();
+        onClaimSuccess();
+        setIsWaiting(false);
+        setAmountClaim(0);
+      });
+  };
 
   return (
     <Dialog open={open} onClose={handleClose}>
@@ -26,7 +39,7 @@ export default function ClaimDialog({open, setOpen, contract, currentUser, getBa
       <DialogContent>
         <TextField
           value={amountClaim}
-          onChange={e => setAmountClaim(e.target.value)}
+          onChange={(e) => setAmountClaim(e.target.value)}
           autoFocus
           margin="dense"
           id="amount"
@@ -39,7 +52,13 @@ export default function ClaimDialog({open, setOpen, contract, currentUser, getBa
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={claim}>Claim</Button>
+        <Button disabled={isWaiting} onClick={claim}>
+          {
+            !isWaiting
+          ? 'Claim'
+          : 'Claiming'
+          }
+        </Button>
       </DialogActions>
     </Dialog>
   );
