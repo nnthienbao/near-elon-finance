@@ -10,10 +10,12 @@ import IconButton from "@mui/material/IconButton";
 import CopyButton from "@mui/icons-material/CopyAll";
 import SendDialog from "./SendDialog";
 import ClaimDialog from "./ClaimDialog";
-import Big from 'big.js';
+import Big from "big.js";
 import elonImg from "../../assets/elon.png";
 
-const BOATLOAD_OF_GAS = Big(3).times(10 ** 13).toFixed();
+const BOATLOAD_OF_GAS = Big(3)
+  .times(10 ** 13)
+  .toFixed();
 
 export default function Form({ contract, currentUser }) {
   const [openSendDialog, setOpenSendDialog] = useState(false);
@@ -33,16 +35,30 @@ export default function Form({ contract, currentUser }) {
   }, []);
 
   const getBalance = () => {
-    contract.ft_balance_of({account_id: currentUser.accountId}).then(amount => {
-      setAmount(amount);
-    })
-  }
+    contract
+      .ft_balance_of({ account_id: currentUser.accountId })
+      .then((amount) => {
+        setAmount(amount);
+      });
+  };
 
   const onRegister = () => {
-    contract.storage_deposit({}, BOATLOAD_OF_GAS, Big('0.00125').times(10 ** 24).toFixed()).then(res => {
-      console.log('Register done');
-    });
-  }
+    contract
+      .storage_deposit(
+        {},
+        BOATLOAD_OF_GAS,
+        Big("0.00125")
+          .times(10 ** 24)
+          .toFixed()
+      )
+      .then((res) => {
+        console.log("Register done");
+      });
+  };
+
+  const copyAccountIdToClipboard = () => {
+    navigator.clipboard.writeText(currentUser.accountId);
+  };
 
   return (
     <>
@@ -78,6 +94,7 @@ export default function Form({ contract, currentUser }) {
                     color="primary"
                     aria-label="upload picture"
                     component="span"
+                    onClick={copyAccountIdToClipboard}
                   >
                     <CopyButton />
                   </IconButton>
@@ -94,7 +111,11 @@ export default function Form({ contract, currentUser }) {
               >
                 Send
               </Button>
-              <Button variant="outlined" startIcon={<ReceiptIcon />}>
+              <Button
+                onClick={copyAccountIdToClipboard}
+                variant="outlined"
+                startIcon={<ReceiptIcon />}
+              >
                 Receive
               </Button>
               <Button
@@ -125,7 +146,11 @@ export default function Form({ contract, currentUser }) {
             </Typography>
           </Grid>
           <Grid item style={{ marginTop: 20 }}>
-            <Button onClick={onRegister} variant="outlined" startIcon={<ReceiptIcon />}>
+            <Button
+              onClick={onRegister}
+              variant="outlined"
+              startIcon={<ReceiptIcon />}
+            >
               Register
             </Button>
           </Grid>
@@ -134,8 +159,19 @@ export default function Form({ contract, currentUser }) {
           </Grid>
         </Grid>
       )}
-      <SendDialog open={openSendDialog} setOpen={setOpenSendDialog} contract={contract} currentUser={currentUser} />
-      <ClaimDialog open={openClaimDialog} setOpen={setOpenClaimDialog} contract={contract} currentUser={currentUser} getBalance={getBalance} />
+      <SendDialog
+        open={openSendDialog}
+        setOpen={setOpenSendDialog}
+        contract={contract}
+        currentUser={currentUser}
+      />
+      <ClaimDialog
+        open={openClaimDialog}
+        setOpen={setOpenClaimDialog}
+        contract={contract}
+        currentUser={currentUser}
+        getBalance={getBalance}
+      />
     </>
   );
 }
